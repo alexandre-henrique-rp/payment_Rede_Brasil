@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "cli": "bash ./cli/inicial.sh",
     "dev": "NODE_ENV=dev ts-node-dev -r dotenv/config ./src/server.ts",
     "start": "NODE_ENV=prod node -r dotenv/config ./produt/server.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -12,7 +13,7 @@
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
     "pull": "npx prisma db pull",
-    "push": "npx prisma db push",
+    "push": "yarn prisma db push",
     "validate": "npx prisma validate",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -50,6 +51,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@prisma/client": "5.10.2",
     "axios": "^1.6.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

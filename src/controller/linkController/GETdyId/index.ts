@@ -1,0 +1,1 @@
+export const LinkGETdyId = async () => {}

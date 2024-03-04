@@ -9,7 +9,7 @@
     "outDir": "./produt"
   },
   "include": ["./src/**/*"],
-  "exclude": ["./node_modules", "./.git", "./.vscode"],
+  "exclude": ["./node_modules", "./.git", "./.vscode", "src/type"],
   "ts-node": {
     "transpileOnly": true
   }
