@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import LinkService from '../../../service/link';
+import { GetTypeCert } from '../../../type/Price_cert_type';
 
 /**
  * Retrieves a link using a GET request.
@@ -8,11 +9,11 @@ import LinkService from '../../../service/link';
  * @param {Response} res - the response object
  * @return {Promise<void>} a Promise that resolves when the link is retrieved successfully, and rejects with an error otherwise
  */
-export const LinkGET = async (req: Request, res: Response) => {
+export const LinkGET = async (req: Request, res: Response): Promise<any> => {
   try {
     const request = await LinkService.GET()
     return res.status(200).json(request)
-  } catch (error) {
+  } catch (error: any) {
     return res.status(500).json(error)
   }
 }
