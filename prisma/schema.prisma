@@ -417,7 +417,7 @@ model price_cert {
   payment_url   String?   @db.Text
   UrlPg         String?   @db.Text
   createdAt     DateTime  @default(now()) @db.DateTime(0)
-  updatedAt     DateTime? @db.DateTime(0)
+  updatedAt     DateTime? @updatedAt
   Boleto        Boolean?  @default(false)
   Cartao        Boolean?  @default(false)
   Pix           Boolean?  @default(false)

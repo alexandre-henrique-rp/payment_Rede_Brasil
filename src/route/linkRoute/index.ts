@@ -4,9 +4,9 @@ import linkController from '../../controller/linkController';
 const LinkRouter = express.Router();
 
 LinkRouter.get('/', linkController.LinkGET);
-LinkRouter.get('/:id', linkController.LinkGETdyId);
+LinkRouter.get('/:uuid', linkController.LinkGETdyId);
 LinkRouter.post('/', linkController.LinkPOST);
-LinkRouter.put('/update/:id', linkController.LinkPUT);
-LinkRouter.delete('/delete/:id', linkController.LinkDELETE);
+LinkRouter.put('/update/:uuid', linkController.LinkPUT);
+LinkRouter.delete('/delete/:uuid', linkController.LinkDELETE);
 
 export default LinkRouter;

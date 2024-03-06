@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { GetLinkLib } from '../../Lib/link/GetByUuid';
+import { GetFcwebLib } from '../../Lib/Cliente/GetById';
 const prisma = new PrismaClient();
 
 
@@ -31,10 +33,9 @@ const PixService = {
 
   async POST(data: any): Promise<any> {
     try {
-      // const pix = await prisma.'nome tabela'.create({
-      //   data: data
-      // });
-      // return pix;
+      const requestLink = await GetLinkLib(data.uuid)
+      const requestClient = await GetFcwebLib(requestLink.FcwebId)
+     
     } catch (error) {
       console.error(error);
       throw new Error(error);

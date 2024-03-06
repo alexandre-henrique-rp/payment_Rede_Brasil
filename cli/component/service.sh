@@ -32,10 +32,11 @@ const ${nome_service^}Service = {
       // const ${nome_service} = await prisma.'nome tabela'.findMany({
       //   take: 10
       // });
-      // return ${nome_service};
+      const data = {data: ${nome_service}, count: ${nome_service}.length}
+      return data
     } catch (error) {
-      console.error(error);
-      throw new Error(error);
+      console.error('Erro ao buscar dados:', error);
+      throw new Error('Não foi possível buscar os dados: ' + error);
     }
   },
 
@@ -48,8 +49,8 @@ const ${nome_service^}Service = {
       // });
       // return ${nome_service};
     } catch (error) {
-      console.error(error);
-      throw new Error(error);
+       console.error('Erro ao buscar registro por UUID:', error);
+      throw new Error('Não foi possível buscar o registro: ' + error);
     }
   },
 
@@ -60,8 +61,8 @@ const ${nome_service^}Service = {
       // });
       // return ${nome_service};
     } catch (error) {
-      console.error(error);
-      throw new Error(error);
+      console.error('Erro ao criar registro:', error);
+      throw new Error('Não foi possível criar o registro: ' + error);
     }
   },
 
@@ -75,22 +76,25 @@ const ${nome_service^}Service = {
       // });
       // return ${nome_service};
     } catch (error) {
-      console.error(error);
-      throw new Error(error);
+      console.error('Erro ao editar registro:', error);
+      throw new Error('Não foi possível editar o registro: ' + error);
     }
   },
 
   async DELETE(id: number): Promise<any> {
     try {
-      // const ${nome_service} = await prisma.'nome tabela'.delete({
+      // await prisma.'nome tabela'.delete({
       //   where: {
       //     id: id
       //   }
       // });
-      // return ${nome_service};
+      return {
+        message: 'Registro excluído com sucesso!',
+        Reference: id
+      };
     } catch (error) {
-      console.error(error);
-      throw new Error(error);
+      console.error('Erro ao excluir registro:', error);
+      throw new Error('Não foi possível excluir o registro: ' + error);
     }
   },
 }

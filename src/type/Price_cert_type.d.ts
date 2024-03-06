@@ -66,3 +66,36 @@ export interface GetTypeCert {
   Cartao?: boolean;
 }
 
+
+/**
+ * Description placeholder
+ * @date 05/03/2024 - 12:10:45
+ *
+ * @export
+ * @interface GetAllPriceCert
+ * @typedef {GetAllPriceCert}
+ * @property {GetTypeCert[]} data
+ * @property {number} count
+ * @returns {data: GetTypeCert[], count: number}
+ */
+export interface GetAllPriceCert {
+  data: GetTypeCert[];
+  count: number;
+}
+
+
+/**
+ * Description placeholder
+ * @date 05/03/2024 - 13:25:45
+ *
+ * @export
+ * @interface DeletePriceCert
+ * @typedef {DeletePriceCert}
+ * @property {string} message
+ * @property {string | number} Reference
+ * @returns {message: string, Reference: string | number}
+ */
+export interface DeletePriceCert {
+  message: string
+  Reference: string | number;
+}

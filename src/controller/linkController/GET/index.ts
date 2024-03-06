@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import LinkService from '../../../service/link';
-import { GetTypeCert } from '../../../type/Price_cert_type';
 
 /**
  * Retrieves a link using a GET request.
