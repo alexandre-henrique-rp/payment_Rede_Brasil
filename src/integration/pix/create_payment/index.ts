@@ -1,8 +1,14 @@
 import EfiPay from 'sdk-typescript-apis-efi';
 import options from '../../Authenticate';
 import Txid from '../../Txid';
+import { PixEfi } from '../../../type/pix';
 
-export default async function createPixPayment(dados: any) {
+/**
+ * 
+ * @param dados - { cpf: string, nome: string, valorcd: string }
+ * @returns {Promise<PixEfi>} - { txid, calendario, revisao, devedor, valor, chave, status, loc, pixCopiaECola }
+ */
+export default async function createPixPayment(dados: any): Promise<PixEfi> {
   try {
     const body = {
       calendario: {
@@ -23,14 +29,16 @@ export default async function createPixPayment(dados: any) {
     };
 
     const efipay = new EfiPay(options);
-    const PixPaymentCreate = await efipay.pixCreateCharge(params, body);
+    const PixPaymentCreate = await efipay.pixCreateImmediateCharge([], body);
 
     return PixPaymentCreate;
-  } catch (error) {
-    console.log('Não foi possivel criar o pagamento PIX', error);
-    throw error({
-      message: 'Não foi possivel criar o pagamento PIX',
-      error,
-    });
+  } catch (error: any) {
+    throw {
+      nome: error.nome,
+      message: error.message || 'Erro interno do servidor',
+      chave: error.erros[0].chave || '',
+      caminho: error.erros[0].caminho || '',
+      explicacao: error.erros[0].mensagem || '',
+    };
   }
 }

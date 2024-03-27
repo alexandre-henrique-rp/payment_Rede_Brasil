@@ -25,10 +25,44 @@ import ${nome_route}Controller from '../../controller/${nome_route}Controller';
 
 const ${nome_route^}Router = express.Router();
 
+/** 
+ * @description Retorna uma lista de ${nome_route^}s
+ * @path /
+ * @method GET
+ * @returns {Promise<any>} - {}
+*/
 ${nome_route^}Router.get('/', ${nome_route}Controller.${nome_route^}GET);
+
+/** 
+ * @description Retorna um ${nome_route^} pelo id
+ * @path /:id
+ * @method GET
+ * @returns {Promise<any>} - {}
+*/
 ${nome_route^}Router.get('/:id', ${nome_route}Controller.${nome_route^}GETdyId);
+
+/** 
+ * @description Cria um ${nome_route^}
+ * @path /
+ * @method POST
+ * @returns {Promise<any>} - {}
+*/
 ${nome_route^}Router.post('/', ${nome_route}Controller.${nome_route^}POST);
+
+/** 
+ * @description Atualiza um ${nome_route^} pelo id
+ * @path /update/:id
+ * @method PUT
+ * @returns {Promise<any>} - {}
+*/
 ${nome_route^}Router.put('/update/:id', ${nome_route}Controller.${nome_route^}PUT);
+
+/** 
+ * @description Exclui um ${nome_route^} pelo id
+ * @path /delete/:id
+ * @method DELETE
+ * @returns {Promise<any>} - {}
+*/
 ${nome_route^}Router.delete('/delete/:id', ${nome_route}Controller.${nome_route^}DELETE);
 
 export default ${nome_route^}Router;

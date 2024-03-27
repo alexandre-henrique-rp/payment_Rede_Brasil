@@ -1,4 +1,3 @@
-
 import { PixGET } from './GET';
 import { PixGETdyId } from './GETdyId';
 import { PixPOST } from './POST';

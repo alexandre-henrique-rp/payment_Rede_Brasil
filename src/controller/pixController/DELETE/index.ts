@@ -4,8 +4,8 @@ import DELETEService from '../../../service/pix';
 
 export const PixDELETE = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const request = await DELETEService.DELETE(Number(id));
+    const { uuid } = req.params;
+    const request = await DELETEService.DELETE(uuid);
     res.status(204).json(request);
   } catch (error) {
     console.error(error);

@@ -1,12 +1,10 @@
-
-
 /**
  * Description placeholder
  * @date 04/03/2024 - 15:33:38
  *
  * @export
  * @interface GetTypeCert
- * 
+ *
  * @property {string} Uuid
  * @property {number} FcwebId
  * @property {Date} Date_int
@@ -39,17 +37,17 @@
 export interface GetTypeCert {
   Uuid: string;
   FcwebId: number;
-  Date_int?: date;
+  Date_int?: Date;
   Status_pg: string;
   Cliente_acess: boolean;
-  Date_venc?: date;
+  Date_venc?: Date;
   Parcelas?: string;
   TxidPix?: string;
   TxidBoleto?: string;
   TxidCartao?: string;
   QrLink?: string;
   QrBase64?: string;
-  CreatePixDate?: date;
+  CreatePixDate?: Date;
   PixStatus?: string;
   PixCopiaEC?: string;
   BarCode?: string;
@@ -59,13 +57,38 @@ export interface GetTypeCert {
   payment_to?: string;
   payment_ur?: string;
   UrlPg?: string;
-  createdAt: date;
-  updatedAt?: Date
+  createdAt: Date;
+  updatedAt?: Date;
   Pix?: boolean;
   Boleto?: boolean;
   Cartao?: boolean;
 }
 
+/**
+ * Description placeholder
+ * @date 04/03/2024 - 15:33:38
+ *
+ * @export
+ * @interface GetTypeCertMin
+ *
+ * @property {string} Uuid
+ * @property {number} FcwebId
+ * @property {string} Status_pg
+ * @property {string} UrlPg
+ * @property {boolean} Pix
+ * @property {boolean} Boleto
+ * @property {boolean} Cartao
+ * @returns {GetTypeCert} - {Uuid,  FcwebId,  Status_pg,  UrlPg, Pix,  Boleto,  Cartao}
+ */
+export interface GetTypeCertMin {
+  Uuid: string;
+  FcwebId: number;
+  Status_pg: string;
+  UrlPg?: string;
+  Pix?: boolean;
+  Boleto?: boolean;
+  Cartao?: boolean;
+}
 
 /**
  * Description placeholder
@@ -74,15 +97,14 @@ export interface GetTypeCert {
  * @export
  * @interface GetAllPriceCert
  * @typedef {GetAllPriceCert}
- * @property {GetTypeCert[]} data
+ * @property {GetTypeCertMin[]} data - {Uuid,  FcwebId,  Status_pg,  UrlPg, Pix,  Boleto,  Cartao}
  * @property {number} count
- * @returns {data: GetTypeCert[], count: number}
+ * @returns {data: GetTypeCertMin[], count: number}
  */
 export interface GetAllPriceCert {
-  data: GetTypeCert[];
+  data: GetTypeCertMin[];
   count: number;
 }
-
 
 /**
  * Description placeholder
@@ -96,6 +118,6 @@ export interface GetAllPriceCert {
  * @returns {message: string, Reference: string | number}
  */
 export interface DeletePriceCert {
-  message: string
+  message: string;
   Reference: string | number;
 }

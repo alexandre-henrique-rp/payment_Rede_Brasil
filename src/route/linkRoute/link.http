@@ -1,0 +1,32 @@
+@host= http://localhost:3041/link
+@UUid=
+
+###
+
+GET {{host}}/
+
+###
+
+GET {{host}}/{{UUid}}
+
+###
+
+POST {{host}}/
+Content-Type: application/json
+{
+	"FcwebId": 27237,
+  "Date_int": "2024-03-27T14:05:10.944Z",
+  "Status_pg": "Falta pagamento"
+}
+
+###
+
+PUT {{host}}/update/{{UUid}}
+Content-Type: application/json
+{
+  "Status_pg": "Pago"
+}
+
+###
+
+DELETE {{host}}/delete/{{UUid}}

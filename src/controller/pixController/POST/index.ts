@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import POSTService from '../../../service/pix';
 
-
+/**
+ * Handles a POST request to the Pix endpoint.
+ *
+ * @param {Request} req - {uuid: string}
+ * @param {Response} res - { Uuid, FcwebId, Criacao, Expiracao, Status, PixCopiaECola, LinkPgEfi, Qrcode }.
+ */
 export const PixPOST = async (req: Request, res: Response) => {
   try {
     const { body } = req;

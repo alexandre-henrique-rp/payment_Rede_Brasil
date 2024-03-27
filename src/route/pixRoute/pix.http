@@ -1,0 +1,32 @@
+@host = http://localhost:3041/pix
+@UUid = 
+
+###
+
+POST {{host}}/list
+content-type: application/json
+{
+    "inicio": "2024-03-15T00:00:00Z",
+    "fim": "2024-03-26T00:00:00Z"
+}
+
+###
+
+GET {{host}}/fc820259-c5b4-4e16-92a5-518c0c2b2b42
+
+###
+
+POST {{host}}/
+Content-Type: application/json
+{
+  uuid:
+}
+
+###
+
+PUT {{host}}/update/fc820259-c5b4-4e16-92a5-518c0c2b2b42
+content-type: application/json
+{
+    "inicio": "2024-03-15T00:00:00Z",
+    "fim": "2024-03-26T00:00:00Z"
+}
