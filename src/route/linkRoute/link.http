@@ -1,5 +1,5 @@
-@host= http://localhost:3041/link
-@UUid=
+@host = http://localhost:3041/link
+@UUid = 9dfea759-3f40-4f8c-85ed-1a65029d1dc7
 
 ###
 
@@ -11,10 +11,11 @@ GET {{host}}/{{UUid}}
 
 ###
 
-POST {{host}}/
+POST {{host}}
 Content-Type: application/json
+
 {
-	"FcwebId": 27237,
+	"FcwebId": 28005,
   "Date_int": "2024-03-27T14:05:10.944Z",
   "Status_pg": "Falta pagamento"
 }

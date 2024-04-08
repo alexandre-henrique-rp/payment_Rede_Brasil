@@ -36,7 +36,7 @@ const ${nome_service^}Service = {
       return data
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
-      throw new Error('Não foi possível buscar os dados: ' + error);
+      throw error;
     }
   },
 
@@ -50,7 +50,7 @@ const ${nome_service^}Service = {
       // return ${nome_service};
     } catch (error) {
        console.error('Erro ao buscar registro por UUID:', error);
-      throw new Error('Não foi possível buscar o registro: ' + error);
+      throw error;
     }
   },
 
@@ -62,7 +62,7 @@ const ${nome_service^}Service = {
       // return ${nome_service};
     } catch (error) {
       console.error('Erro ao criar registro:', error);
-      throw new Error('Não foi possível criar o registro: ' + error);
+      throw error;
     }
   },
 
@@ -77,7 +77,7 @@ const ${nome_service^}Service = {
       // return ${nome_service};
     } catch (error) {
       console.error('Erro ao editar registro:', error);
-      throw new Error('Não foi possível editar o registro: ' + error);
+      throw error;
     }
   },
 
@@ -94,7 +94,7 @@ const ${nome_service^}Service = {
       };
     } catch (error) {
       console.error('Erro ao excluir registro:', error);
-      throw new Error('Não foi possível excluir o registro: ' + error);
+      throw error;
     }
   },
 }

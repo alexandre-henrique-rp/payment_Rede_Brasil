@@ -1,25 +1,27 @@
 @host = http://localhost:3041/pix
-@UUid = 
+@UUid = "9dfea759-3f40-4f8c-85ed-1a65029d1dc7"
 
 ###
 
 POST {{host}}/list
 content-type: application/json
+
 {
-    "inicio": "2024-03-15T00:00:00Z",
-    "fim": "2024-03-26T00:00:00Z"
+    "inicio": "15/03/2024",
+    "fim": "26/03/2024"
 }
 
 ###
 
-GET {{host}}/fc820259-c5b4-4e16-92a5-518c0c2b2b42
+GET {{host}}/{{UUid}}
 
 ###
 
-POST {{host}}/
+POST {{host}}
 Content-Type: application/json
+
 {
-  uuid:
+    "uuid": {{UUid}}
 }
 
 ###

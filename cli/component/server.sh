@@ -26,7 +26,7 @@ linha_app_use=$(grep -n "app.use(cors());" server.ts | cut -d ":" -f 1)
 
 # Adicionar a linha abaixo da linha contendo "app.use(cors());"
 sed -i "${linha_app_use}a\\
-app.use('${nome_route}', ${nome_route^}Router);" server.ts
+app.use('/${nome_route}', ${nome_route^}Router);" server.ts
 
 # Retorna o caminho onde o diretório do controller foi criado
 echo "$caminho_route"

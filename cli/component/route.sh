@@ -68,5 +68,42 @@ ${nome_route^}Router.delete('/delete/:id', ${nome_route}Controller.${nome_route^
 export default ${nome_route^}Router;
 EOF
 
+cat <<EOF > "${nome_route}Route/${nome_route}.http"
+@host = "http://localhost:3041/${nome_route}"
+@ID = "12" //id de teste
+
+###
+
+GET {{host}}/
+
+###
+
+GET {{host}}/{{ID}}
+
+###
+
+POST {{host}}/
+content-type: application/json
+
+{
+    "name": "string",
+}
+
+###
+
+PUT {{host}}/update/{{ID}}
+content-type: application/json
+
+{
+    "name": "string",
+}
+
+###
+
+DELETE {{host}}/delete/{{ID}}
+
+###
+EOF
+
 # Retorna o caminho onde o diretório do controller foi criado
 echo "$caminho_route"

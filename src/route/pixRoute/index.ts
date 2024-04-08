@@ -17,6 +17,15 @@ PixRouter.post('/list', pixController.PixGET);
 */
 PixRouter.get('/:uuid', pixController.PixGETdyId);
 
+
+
+PixRouter.get('/verifique/pg', pixController.VERIFIQUE);
+
+
+
+// PixRouter.get('/verifique/:uuid', pixController.PixGETdyId);
+
+
 /**
  * @description POST /pix
  * @param {any} data - {uuid: string}

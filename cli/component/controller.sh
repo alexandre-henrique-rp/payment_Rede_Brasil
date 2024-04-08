@@ -29,23 +29,23 @@ for pasta in GET GETdyId POST PUT DELETE; do
     if [ ! -d "$pasta_dir" ]; then
         mkdir "$pasta_dir"
         echo "import { Request, Response } from 'express';" > "${pasta_dir}/index.ts"
-        echo "import ${pasta^}Service from '../../../service/${nome_controller}';" >> "${pasta_dir}/index.ts"
+        echo "import ${nome_controller^}Service from '../../../service/${nome_controller}';" >> "${pasta_dir}/index.ts"
         echo "" >> "${pasta_dir}/index.ts"
         echo "" >> "${pasta_dir}/index.ts"
         echo "export const ${nome_controller^}${pasta^} = async (req: Request, res: Response) => {" >> "${pasta_dir}/index.ts"
         echo "  try {" >> "${pasta_dir}/index.ts"
         if [ "$pasta" == "DELETE" ] || [ "$pasta" == "GETdyId" ]; then
             echo "    const { id } = req.params;" >> "${pasta_dir}/index.ts"
-            echo "    const request = await ${pasta^}Service.${pasta}(Number(id));" >> "${pasta_dir}/index.ts"
+            echo "    const request = await ${nome_controller^}Service.${pasta}(Number(id));" >> "${pasta_dir}/index.ts"
         elif [ "$pasta" == "POST" ]; then
             echo "    const { body } = req;" >> "${pasta_dir}/index.ts"
-            echo "    const request = await ${pasta^}Service.${pasta}(body);" >> "${pasta_dir}/index.ts"
+            echo "    const request = await ${nome_controller^}Service.${pasta}(body);" >> "${pasta_dir}/index.ts"
         elif [ "$pasta" == "PUT" ]; then
             echo "    const { id } = req.params;" >> "${pasta_dir}/index.ts"
             echo "    const { body } = req;" >> "${pasta_dir}/index.ts"
-            echo "    const request = await ${pasta^}Service.${pasta}(Number(id), body);" >> "${pasta_dir}/index.ts"
+            echo "    const request = await ${nome_controller^}Service.${pasta}(Number(id), body);" >> "${pasta_dir}/index.ts"
         else
-            echo "    const request = await ${pasta^}Service.${pasta}();" >> "${pasta_dir}/index.ts"
+            echo "    const request = await ${nome_controller^}Service.${pasta}();" >> "${pasta_dir}/index.ts"
         fi
         # Define o código de status com base na pasta
         if [ "$pasta" == "GET" ] || [ "$pasta" == "GETdyId" ]; then
