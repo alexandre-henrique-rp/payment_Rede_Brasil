@@ -1,0 +1,34 @@
+@host = "http://127.0.0.1:3041/boleto"
+@ID = "12" //id de teste
+
+###
+
+GET {{host}}/
+
+###
+
+GET {{host}}/{{ID}}
+
+###
+
+POST {{host}}
+content-type: application/json
+
+{
+    "Uuid": "fc820259-c5b4-4e16-92a5-518c0c2b2b42",
+}
+
+###
+
+PUT {{host}}/update/{{ID}}
+content-type: application/json
+
+{
+    "name": "string",
+}
+
+###
+
+DELETE {{host}}/delete/{{ID}}
+
+###

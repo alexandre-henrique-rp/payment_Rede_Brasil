@@ -1,3 +1,4 @@
+import BoletoRouter from './route/boletoRoute';
 
 import PixRouter from './route/pixRoute';
 import LinkRouter from './route/linkRoute';
@@ -11,6 +12,7 @@ const app = express();
 app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cors());
+app.use('/boleto', BoletoRouter);
 app.use('/pix', PixRouter);
 app.use('/link', LinkRouter);
 

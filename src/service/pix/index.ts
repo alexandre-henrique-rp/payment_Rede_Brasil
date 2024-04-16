@@ -38,17 +38,8 @@ const PixService = {
    */
   async GETdyId(uuid: string): Promise<any> {
     try {
-      const pix = await prisma.price_cert.findUnique({
-        where: {
-          Uuid: uuid,
-        },
-      });
-      const detalhePix = await getByTxidPixPayment(pix.TxidPix);
-      const dataRetorno = {
-        ...pix,
-        payment: detalhePix,
-      };
-      return dataRetorno;
+      const request = await verifiquePixFunc(uuid);
+      return request;
     } catch (error) {
       console.error(error);
       throw error;
@@ -182,94 +173,126 @@ const PixService = {
           }
         },
       });
-      console.log('lista', lista);
+      // console.log('lista', lista);
 
       const mapList = await Promise.all(lista.map(async (item) => {
-        const verifique = await getByTxidPixPayment(item.TxidPix);
-        if (verifique.status === 'ATIVA') {
-          const LocId = `${verifique.loc.id}`;
-          const Qrcode: QrCodePixType = await QrCodePix(LocId);
-          const DadosUpdate = {
-            TxidPix: verifique.txid,
-            QrLink: Qrcode.linkVisualizacao,
-            QrBase64: Qrcode.imagemQrcode,
-            PixCopiaECola: verifique.pixCopiaECola,
-            PixStatus: verifique.status,
-            CreatePixDate: verifique.calendario.criacao,
-          };
-          await LinkService.PUT(item.Uuid, DadosUpdate);
-        const data = {
-          Uuid: item.Uuid,
-          FcwebId: item.FcwebId,
-          Criacao: verifique.calendario.criacao,
-          Expiracao: verifique.calendario.expiracao,
-          Status: verifique.status,
-          PixCopiaECola: verifique.pixCopiaECola,
-          LinkPgEfi: Qrcode.linkVisualizacao,
-          Qrcode: Qrcode.imagemQrcode,
-        }
-          return data;
-        } else {
-          const DadosUpdate = { 
-            Status_pg: 'Pago'
-          };
-          await LinkService.PUT(item.Uuid, DadosUpdate);
-          const cliente = await prisma.fcweb.findUnique({
-            where: {
-              id: item.FcwebId
-            },
-            select: {
-              id: true,
-              historico: true
-            }
-          });
-
-          const DateAtual = new Date();
-          const dia = DateAtual.getDate() > 9 ? DateAtual.getDate() : `0${DateAtual.getDate()}`;
-          const mes = DateAtual.getMonth() + 1 > 9 ? DateAtual.getMonth() + 1 : `0${DateAtual.getMonth() + 1}`;
-          const ano = DateAtual.getFullYear();
-          const dataFormatada = `${dia}-${mes}-${ano}`;
-          const hora = DateAtual.getHours();
-          const minuto = DateAtual.getMinutes();
-          const segundo = DateAtual.getSeconds();
-          const data_hora = `${dataFormatada}.${hora}:${minuto}:${segundo}`;
-          const novoHistorico = `${cliente?.historico}${data_hora} - Efi - cleinete efetuou o pagamento - ${verifique.pixCopiaECola}\n`;
-
-          await prisma.fcweb.update({
-            where: {
-              id: item.FcwebId
-            },
-            data: {
-              estatos_pgto: 'Concluido',
-              pgto_efi: 'Pago Pix Efi',
-            } 
-          })
-        }
+        const verifique = await verifiquePixFunc(item.Uuid);
+        return verifique;
       }));
-      console.log(mapList);
-      return 'ola';
+
+      return mapList;
     } catch (error) {
       console.error(error);
       throw new Error(error);
     }
   },
-
-  // async pixVerifiqueById(uuid: string): Promise<string> {
-  //   try {
-  //     await prisma.price_cert.update({
-  //       where: {
-  //         Uuid: uuid,
-  //       },
-  //       data: {
-  //         Pix: false,
-  //       },
-  //     });
-  //     return `Pagamento uuid: ${uuid} - deletado com sucesso`;
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error(error);
-  //   }
-  // },
 };
 
 export default PixService;
+
+
+async function verifiquePixFunc(uuid: string) {
+  try {
+    const pix = await prisma.price_cert.findUnique({
+      where: {
+        Uuid: uuid,
+      },
+    });
+    console.log('pix', pix.Uuid);
+    const detalhePix = await getByTxidPixPayment(pix.TxidPix);
+
+    if (detalhePix.status === 'ATIVA') {
+      const LocId = `${detalhePix.loc.id}`;
+      const Qrcode: QrCodePixType = await QrCodePix(LocId);
+      const DadosUpdate = {
+        TxidPix: detalhePix.txid,
+        QrLink: Qrcode.linkVisualizacao,
+        QrBase64: Qrcode.imagemQrcode,
+        PixCopiaECola: detalhePix.pixCopiaECola,
+        PixStatus: detalhePix.status,
+        CreatePixDate: detalhePix.calendario.criacao,
+      };
+      await LinkService.PUT(pix.Uuid, DadosUpdate);
+
+      const data = {
+        Uuid: pix.Uuid,
+        FcwebId: pix.FcwebId,
+        Criacao: detalhePix.calendario.criacao,
+        Expiracao: detalhePix.calendario.expiracao,
+        Status: detalhePix.status,
+        PixCopiaECola: detalhePix.pixCopiaECola,
+        LinkPgEfi: Qrcode.linkVisualizacao,
+        Qrcode: Qrcode.imagemQrcode,
+      }
+      return data;
+
+    } else {
+
+      const cliente = await prisma.fcweb.findUnique({
+        where: {
+          id: pix.FcwebId
+        },
+        select: {
+          id: true,
+          historico: true
+        }
+      });
+
+      const DateAtual = new Date();
+      const dia = DateAtual.getDate() > 9 ? DateAtual.getDate() : `0${DateAtual.getDate()}`;
+      const mes = DateAtual.getMonth() + 1 > 9 ? DateAtual.getMonth() + 1 : `0${DateAtual.getMonth() + 1}`;
+      const ano = DateAtual.getFullYear();
+      const dataFormatada = `${dia}-${mes}-${ano}`;
+      const hora = DateAtual.getHours();
+      const minuto = DateAtual.getMinutes();
+      const segundo = DateAtual.getSeconds();
+      const data_hora = `${dataFormatada}.${hora}:${minuto}:${segundo}`;
+
+      const DataPg = new Date(detalhePix.pix[0]?.horario);
+      const diaPg = DataPg.getDate() > 9 ? DataPg.getDate() : `0${DataPg.getDate()}`;
+      const mesPg = DataPg.getMonth() + 1 > 9 ? DataPg.getMonth() + 1 : `0${DataPg.getMonth() + 1}`;
+      const anoPg = DataPg.getFullYear();
+      const dataFormatadaPg = `${diaPg}/${mesPg}/${anoPg}`;
+      const horaPg = DataPg.getHours();
+      const minutoPg = DataPg.getMinutes();
+      const segundoPg = DataPg.getSeconds();
+      const data_horaPg = `${dataFormatadaPg} as ${horaPg}:${minutoPg}:${segundoPg}`;
+
+      const novoHistorico = `${cliente?.historico}${data_hora} - Efi - cleinete efetuou o pagamento efetuado em: ${data_horaPg}\n`;
+
+      await prisma.fcweb.update({
+        where: {
+          id: pix.FcwebId
+        },
+        data: {
+          estatos_pgto: 'Pago',
+          pgto_efi: 'Pago Pix Efi',
+          historico: novoHistorico
+        },
+        select: {
+          id: true,
+          estatos_pgto: true,
+          pgto_efi: true,
+          historico: true
+        }
+      })
+      const DadosUpdate = {
+        Status_pg: 'Pago',
+        Date_pg: detalhePix.pix[0]?.horario
+      };
+      await LinkService.PUT(pix.Uuid, DadosUpdate);
+
+      const data = {
+        Uuid: pix.Uuid,
+        FcwebId: pix.FcwebId,
+        Status: detalhePix.status,
+      }
+      return data;
+    }
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
