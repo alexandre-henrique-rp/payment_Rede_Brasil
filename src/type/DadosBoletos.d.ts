@@ -106,3 +106,16 @@ export interface RespostaBoleto {
   expira: string;
   IdPayment: number;
 }
+
+/**
+ * Defines the interface for the DadosCancelBoleto object.
+ * @interface
+ * @typeparam {number} IdPayment
+ * @example
+ * {
+ *   IdPayment: number;
+ * }
+ */
+export interface DadosCancelBoleto {
+  IdPayment: number;
+}

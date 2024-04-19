@@ -4,8 +4,8 @@ import BoletoService from '../../../service/boleto';
 
 export const BoletoDELETE = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const request = await BoletoService.DELETE(Number(id));
+    const { uuid } = req.params;
+    const request = await BoletoService.DELETE(uuid);
     res.status(204).json(request);
   } catch (error) {
     console.error(error);

@@ -3,13 +3,6 @@ import boletoController from '../../controller/boletoController';
 
 const BoletoRouter = express.Router();
 
-/** 
- * @description Retorna uma lista de Boletos
- * @path /
- * @method GET
- * @returns {Promise<any>} - {}
-*/
-BoletoRouter.get('/', boletoController.BoletoGET);
 
 /** 
  * @description Retorna um Boleto pelo id
@@ -17,7 +10,15 @@ BoletoRouter.get('/', boletoController.BoletoGET);
  * @method GET
  * @returns {Promise<any>} - {}
 */
-BoletoRouter.get('/:id', boletoController.BoletoGETdyId);
+BoletoRouter.get('/:uuid', boletoController.BoletoGETdyId);
+
+/** 
+ * @description Cria um Boleto
+ * @path /:uuid
+ * @method POST
+ * @returns {Promise<any>} - {}
+*/
+BoletoRouter.post('/:uuid', boletoController.BoletoPOSTUuid);
 
 /** 
  * @description Cria um Boleto
@@ -25,7 +26,7 @@ BoletoRouter.get('/:id', boletoController.BoletoGETdyId);
  * @method POST
  * @returns {Promise<any>} - {}
 */
-BoletoRouter.post('/', boletoController.BoletoPOSTUuid);
+BoletoRouter.post('/', boletoController.BoletoPOST);
 
 /** 
  * @description Atualiza um Boleto pelo id
@@ -33,7 +34,7 @@ BoletoRouter.post('/', boletoController.BoletoPOSTUuid);
  * @method PUT
  * @returns {Promise<any>} - {}
 */
-BoletoRouter.put('/update/:id', boletoController.BoletoPUT);
+BoletoRouter.put('/update/:uuid', boletoController.BoletoPUT);
 
 /** 
  * @description Exclui um Boleto pelo id
@@ -41,6 +42,6 @@ BoletoRouter.put('/update/:id', boletoController.BoletoPUT);
  * @method DELETE
  * @returns {Promise<any>} - {}
 */
-BoletoRouter.delete('/delete/:id', boletoController.BoletoDELETE);
+BoletoRouter.delete('/delete/:uuid', boletoController.BoletoDELETE);
 
 export default BoletoRouter;

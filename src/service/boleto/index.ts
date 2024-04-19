@@ -5,50 +5,80 @@ import { GetTypeCert, UpdateTypeCert } from '../../type/Price_cert_type';
 import { GetFcweb, UpdateFcweb } from '../../type/fcweb_type';
 import { DadosCreateBoleto, RespostaBoleto } from '../../type/DadosBoletos';
 import createBoletoPayment from '../../integration/boleto/create_payment';
+import CepApi from '../../integration/cep';
+
+import CancelBoletoPayment from '../../integration/boleto/cancel_payment';
+import updateBoletoPayment from '../../integration/boleto/update_vencimento';
+import GetByIdBoletoPayment from '../../integration/boleto/get_by_id_payment';
+import { error } from 'console';
 const prisma = new PrismaClient();
 
+interface DataPostBoleto {
+  id: any;
+  expira: string;
+  nome?: string;
+  email: string;
+  cpf?: string;
+  dtnascimento: string;
+  cep: string;
+  razaosocial?: string;
+  cnpj?: string;
+  telefone: string;
+  nrua: string;
+}
 
 const BoletoService = {
-  async GET(): Promise<any> {
+
+  /**
+   * 
+   * @param uuid 
+   * @returns {Promise<any>} - { txid, calendario, revisao, devedor, valor, chave, status, loc, pixCopiaECola }
+   */
+  async GETdyId(uuid: string): Promise<any> {
     try {
-      // const boleto = await prisma.'nome tabela'.findMany({
-      //   take: 10
-      // });
-      // const data = {data: boleto, count: boleto.length}
-      // return data
+      const requestLink: GetTypeCert = await GetLinkLib(uuid);
+      const id = Number(requestLink.TxidBoleto);
+      const boleto = await GetByIdBoletoPayment(id)
+      return boleto;
     } catch (error) {
-      console.error('Erro ao buscar dados:', error);
+      console.error('Erro ao buscar registro por UUID:', error);
       throw error;
     }
   },
 
-  async GETdyId(id: number): Promise<any> {
+  /**
+   * 
+   * @param data 
+   * @example
+   * {
+   *   id: any;
+   *   expira: string;
+   *   nome: string;
+   *   email: string;
+   *   cpf: string;
+   *   dtnascimento: string;
+   *   cep: string;
+   *   razaosocial: string;
+   *   cnpj: string;
+   *   telefone: string;
+   *   nrua: string;
+   }
+   * @return {Promise<any>} - { txid, calendario, revisao, devedor, valor, chave, status, loc, pixCopiaECola }
+   */
+  async POST(data: DataPostBoleto): Promise<any> {
     try {
-      // const boleto = await prisma.'nome tabela'.findUnique({
-      //   where: {
-      //     id: id
-      //   }
-      // });
-      // return boleto;
-    } catch (error) {
-       console.error('Erro ao buscar registro por UUID:', error);
-      throw error;
-    }
-  },
-
-  async POST(data: any): Promise<any> {
-    try {
-      const id = data.id;
+      const id = Number(data.id);
       const requestLink = await prisma.price_cert.create({
         data: {
-          FcwebId: Number(id),
+          FcwebId: id,
           Status_pg: 'Falta pagamento',
           Date_int: new Date().toISOString(),
         },
       });
 
       const requestClient: GetFcweb = await GetFcwebLib(id);
-      
+      const DadosCep = await CepApi(data.cep);
+
 
       const dadosBoleto: DadosCreateBoleto = {
         expira: data.expira,
@@ -58,12 +88,12 @@ const BoletoService = {
         nasc: data.dtnascimento,
         cel: data.telefone,
         cep: data.cep,
-        rua: data.endereco,
-        bairro: data.bairro,
+        rua: DadosCep.logradouro,
+        bairro: DadosCep.bairro,
         numero: data.nrua,
-        complemento: data.complemento,
-        uf: data.uf,
-        cidade: data.cidade,
+        complemento: DadosCep.complemento,
+        uf: DadosCep.uf,
+        cidade: DadosCep.cidade,
         razao: requestClient.razaosocial,
         cnpj: requestClient.cnpj,
         tipocd: requestClient.tipocd,
@@ -85,8 +115,8 @@ const BoletoService = {
       }
 
       await prisma.price_cert.update({
-        where:{
-          Uuid: uuid
+        where: {
+          Uuid: requestLink.Uuid
         },
         data: DadosUpdate
       });
@@ -100,16 +130,11 @@ const BoletoService = {
   /**
    * Creates a boleto payment using the provided data.
    * 
-   * @param {any} data - { Uuid: string; }
-   * @example
-   * {
-   *   Uuid: string;
-   * }
+   * @param Uuid - string
    * @return {Promise<any>} - { txid, calendario, revisao, devedor, valor, chave, status, loc, pixCopiaECola }
    */
-  async POSTUuid(data: any): Promise<any> {
+  async POSTUuid(uuid: string): Promise<any> {
     try {
-      const uuid = data.Uuid;
       const requestLink: GetTypeCert = await GetLinkLib(uuid);
       const requestClient: GetFcweb = await GetFcwebLib(requestLink.FcwebId);
       const DateAtual = new Date();
@@ -151,7 +176,7 @@ const BoletoService = {
       }
 
       await prisma.price_cert.update({
-        where:{
+        where: {
           Uuid: uuid
         },
         data: DadosUpdate
@@ -163,32 +188,82 @@ const BoletoService = {
     }
   },
 
-  async PUT(id: number, data: any): Promise<any> {
+
+  /**
+   * 
+   * @param uuid 
+   * @param data 
+   * @example
+   * {
+   *   expira: string;
+   * }
+   * @returns 
+   */
+  async PUT(uuid: string, data: any): Promise<any> {
     try {
-      // const boleto = await prisma.'nome tabela'.update({
-      //   where: {
-      //     id: id
-      //   },
-      //   data: data
-      // });
-      // return boleto;
+      const requestLink: GetTypeCert = await GetLinkLib(uuid);
+      const id = Number(requestLink.TxidBoleto);
+      const dataBanco = new Date(requestLink.Date_venc).toISOString().split('T')[0];
+      console.log(dataBanco)
+      console.log(data.expira)
+      console.log(compararDatas(dataBanco, data.expira))
+
+
+      const UpdateBoleto = await updateBoletoPayment({
+        IdPayment: id,
+        expira: data.expira
+      });
+
+      const DadosUpdate: UpdateTypeCert = {
+        Date_venc: `${data.expira}T00:00:00.000Z`,
+      }
+
+      await prisma.price_cert.update({
+        where: {
+          Uuid: uuid
+        },
+        data: DadosUpdate
+      });
+
+      const DataVenc = data.expira.split('-');
+
+      return {
+        ...UpdateBoleto,
+        expira: data.expira,
+        mesage: `Boleto atualizado com sucesso! Vencimento: ${DataVenc[2]}/${DataVenc[1]}/${DataVenc[0]}`
+
+      }
     } catch (error) {
       console.error('Erro ao editar registro:', error);
       throw error;
     }
   },
 
-  async DELETE(id: number): Promise<any> {
+
+  /**
+   * 
+   * @param uuid 
+   * @returns 
+   */
+  async DELETE(uuid: string): Promise<any> {
     try {
-      // await prisma.'nome tabela'.delete({
-      //   where: {
-      //     id: id
-      //   }
-      // });
-      return {
-        message: 'Registro excluído com sucesso!',
-        Reference: id
-      };
+      const requestLink: GetTypeCert = await GetLinkLib(uuid);
+      const id = Number(requestLink.TxidBoleto);
+
+      const cancel = await CancelBoletoPayment({
+        IdPayment: id,
+      })
+
+      await prisma.price_cert.update({
+        where: {
+          Uuid: uuid
+        },
+        data: {
+          Boleto: false
+        }
+      });
+
+      return cancel
     } catch (error) {
       console.error('Erro ao excluir registro:', error);
       throw error;
@@ -199,7 +274,31 @@ const BoletoService = {
 export default BoletoService;
 
 
-const ValorProd = (preço:any) => {
+const ValorProd = (preço: any) => {
   const valor = preço.toString().replace(/[.,]/g, '');
-  return Number(valor);
+  if(valor < 1){
+    throw "valor da emissão (0,00) é inferior ao limite mínimo para esta transação (0,01)"
+  } else {
+    return Number(valor);
+  }
+}
+
+function compararDatas(dataBanco: string | number | Date, dataString: string | number | Date) {
+  // Convertendo a string da data do banco para um objeto Date
+  var dataBancoObj = new Date(dataBanco);
+
+  // Convertendo a string da data fornecida para um objeto Date
+  var dataFornecidaObj = new Date(dataString);
+
+  // Comparando as datas
+  if (dataBancoObj < dataFornecidaObj) {
+    return "OK";
+  } else if (dataBancoObj > dataFornecidaObj) {
+    // throw new Error("A Data Fornecida é maior do que a data de vencimento atuale do Boleto.");
+    throw "A Data Fornecida é maior do que a data de vencimento atuale do Boleto.";
+    // return "A Data Fornecida é menor do que a data de vencimento atuale do Boleto.";
+  } else {
+    throw "A Data Fornecida é igual do que a data de vencimento atuale do Boleto.";
+    // return "A Data Fornecida é igual do que a data de vencimento atuale do Boleto.";
+  }
 }

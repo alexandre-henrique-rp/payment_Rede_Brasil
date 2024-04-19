@@ -1,27 +1,26 @@
 import EfiPay from 'sdk-typescript-apis-efi';
 import options from '../../Authenticate';
-import { DadosCancelBoleto } from '../../../type/DadosBoletos';
 
 /**
- * cancels a boleto payment using the provided data.
- *
- * @param {any} dados - 
+ * Gets a boleto payment using the provided id.
+ * 
+ * @param IdPayment - The id of the boleto payment.
  * @example
- * {
- *   IdPayment: number;
- * }
+ * 
+ * const IdPayment: number = 1;
+ * 
  * @return {Promise<any>} - { txid, calendario, revisao, devedor, valor, chave, status, loc, pixCopiaECola }
  */
-export default async function CancelBoletoPayment(dados: DadosCancelBoleto): Promise<any> {
+export default async function GetByIdBoletoPayment(IdPayment: number): Promise<any> {
   try {
     const params = {
-      id: dados.IdPayment,
+      id: IdPayment,
     };
 
     const efipay = new EfiPay(options);
-    const BoletoPaymentCreate = await efipay.cancelCharge(params);
+    const BoletoPaymentGet = await efipay.detailCharge(params);
 
-    return BoletoPaymentCreate;
+    return BoletoPaymentGet;
   } catch (error: any) {
     throw {
       nome: error.nome,

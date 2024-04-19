@@ -1,7 +1,3 @@
-import EfiPay from 'sdk-typescript-apis-efi';
-import options from '../../Authenticate';
-import Txid from '../../Txid';
-import { DadosCreateBoleto } from '../../../type/DadosBoletos';
 
 /**
  * Creates a boleto payment using the provided data.
@@ -46,7 +42,7 @@ import { DadosCreateBoleto } from '../../../type/DadosBoletos';
  */
 export default async function CepApi(pesquisa: string): Promise<any> {
   try {
-    const request = await fetch(`https://viacep.com.br/ws/${pesquisa}/json/`, {
+    const request = await fetch(`https://viacep.com.br/ws/${StringPesquisa(pesquisa)}/json/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -59,4 +55,9 @@ export default async function CepApi(pesquisa: string): Promise<any> {
     console.error(error);
     throw error;
   }
+}
+
+function StringPesquisa(pesquisa: string) {
+  const valor = pesquisa.replace(/[' ']/g, '/')
+  return valor
 }
