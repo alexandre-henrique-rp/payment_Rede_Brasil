@@ -15,7 +15,7 @@
     "pull": "npx prisma db pull",
     "push": "yarn prisma db push",
     "validate": "npx prisma validate",
-    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "lint": "eslint . --ext .ts --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

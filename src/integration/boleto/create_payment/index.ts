@@ -99,7 +99,7 @@ export default async function createBoletoPayment(dados: DadosCreateBoleto): Pro
       ],
 
       metadata: {
-      notification_url: process.env.NOTIFICATION_URL || 'https://api.efipay.com.br/notification',
+      notification_url: `${process.env.NOTIFICATION_URL}/boleto`,
       },
     };
 

@@ -73,7 +73,6 @@ const PixService = {
         PixStatus: pixGenerated.status,
         CreatePixDate: pixGenerated.calendario.criacao,
       };
-      console.log('DadosUpdate', DadosUpdate);
       const updatePriceCert = await LinkService.PUT(data.uuid, DadosUpdate);
       const data_retorno = {
         Uuid: updatePriceCert.Uuid,
@@ -109,7 +108,6 @@ const PixService = {
         txid: requestLink.TxidPix,
       };
       const UpdatePixGenerated: PixEfi = await updatePixPayment(dadosPix);
-      console.log('UpdatePixGenerated', UpdatePixGenerated);
       const LocId = `${UpdatePixGenerated.loc.id}`;
       const Qrcode: QrCodePixType = await QrCodePix(LocId);
       const DadosUpdate = {
@@ -198,7 +196,7 @@ async function verifiquePixFunc(uuid: string) {
         Uuid: uuid,
       },
     });
-    console.log('pix', pix.Uuid);
+    
     const detalhePix = await getByTxidPixPayment(pix.TxidPix);
 
     if (detalhePix.status === 'ATIVA') {
@@ -265,6 +263,8 @@ async function verifiquePixFunc(uuid: string) {
           id: pix.FcwebId
         },
         data: {
+          formapgto: 'PIX',
+          vectoboleto: detalhePix.pix[0]?.horario,
           estatos_pgto: 'Pago',
           pgto_efi: 'Pago Pix Efi',
           historico: novoHistorico
